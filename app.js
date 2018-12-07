@@ -7,6 +7,7 @@ const rl=readLine.createInterface({
 });
 const matcher=require('./matcher');
 const weather=require('./weather');
+const {currentWeather}=require('./parser');
 rl.setPrompt('> ');
 rl.prompt();
 rl.on('line',(reply)=>{
@@ -24,7 +25,7 @@ rl.on('line',(reply)=>{
                 console.log(`Checking weather for ${data.entities.city}.`);
                 weather(data.entities.city,'current')
                     .then(response=>{
-                        console.log(response);
+                        console.log(currentWeather(response));
                         rl.prompt();
                     })
                     .catch(error=>{
