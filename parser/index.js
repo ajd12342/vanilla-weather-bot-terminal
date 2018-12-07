@@ -1,6 +1,7 @@
 'use strict';
 
 const colors = require('colors');
+const dictionary = require('./dictionary');
 let getFeel = temp => {
   if(temp < 5) {
       return "extremely cold";
@@ -18,13 +19,18 @@ let getFeel = temp => {
       return "deadly";
   }
 };
-
+let getPrefix = (conditionCode, tense='present')=>{
+  let findPrefix = dictionary[tense].find(item =>{
+     return item.codes.indexOf(Number(conditionCode)) > -1;
+  });
+  return findPrefix.prefix || "";
+};
 let currentWeather = response =>{
     if(response.query.results){
         let resp=response.query.results.channel;
         let location= `${resp.location.city}, ${resp.location.country}`;
-        let {text, temp} = resp.item.condition;
-        return `Right now, it is ${text.toLowerCase().red.bold} in ${location.bold}. It is ${getFeel(Number(temp))} at ${temp.green} degrees.`
+        let {text, temp,code} = resp.item.condition;
+        return `Right now, ${getPrefix(code)} ${text.toLowerCase().red.bold} in ${location.bold}. It is ${getFeel(Number(temp))} at ${temp.green} degrees.`
     }
 };
 module.exports={currentWeather};

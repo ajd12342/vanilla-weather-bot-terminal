@@ -22,7 +22,7 @@ rl.on('line',(reply)=>{
                 process.exit(0);
                 break;
             case 'CurrentWeather':
-                console.log(`Checking weather for ${data.entities.city}.`);
+                console.log(`Let me check...`);
                 weather(data.entities.city,'current')
                     .then(response=>{
                         console.log(currentWeather(response));
