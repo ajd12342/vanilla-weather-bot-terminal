@@ -13,11 +13,14 @@ rl.on('line',(reply)=>{
     matcher(reply,data =>{
         switch(data.intent){
             case 'Hello':
-                console.log("A big hello from Vanilla!");
+                console.log(`${data.entities.greeting} to you too!`);
                 break;
             case 'Exit':
                 console.log("Have a great day!");
                 process.exit(0);
+                break;
+            case 'CurrentWeather':
+                console.log(`Checking weather for ${data.entities.city}.`);
                 break;
             default:
                 console.log("I don't know what you mean :(");
