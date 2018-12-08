@@ -7,7 +7,7 @@ const rl=readLine.createInterface({
 });
 const matcher=require('./matcher');
 const weather=require('./weather');
-const {currentWeather}=require('./parser');
+const {currentWeather,forecastWeather}=require('./parser');
 rl.setPrompt('> ');
 rl.prompt();
 rl.on('line',(reply)=>{
@@ -30,6 +30,18 @@ rl.on('line',(reply)=>{
                     })
                     .catch(error=>{
                        console.log("There seems to be a problem connecting to the Weather service.");
+                        rl.prompt();
+                    });
+                break;
+            case 'WeatherForecast':
+                console.log(`Let me check...`);
+                weather(data.entities.city,'forecast')
+                    .then(response=>{
+                        console.log(forecastWeather(response,data.entities));
+                        rl.prompt();
+                    })
+                    .catch(error=>{
+                        console.log("There seems to be a problem connecting to the Weather service.");
                         rl.prompt();
                     });
                 break;

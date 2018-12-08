@@ -7,5 +7,14 @@ const patternDict=[{
 },{
     pattern:'\\bweather(?:\\s+like)?\\s+in\\s+(?<city>.+)\\b',
     intent:'CurrentWeather',
-}];
+},{
+    pattern:'\\b(?<weather>hot|cold|rain|rainy|sunny|snow|thunderstorms|windy|drizzle)\\b\\s+in\\s+\\b(?<city>' +
+        '(?:\\w+\\s+)+)(?<time>day\\s+after\\s+tomorrow|tomorrow|today)',
+    intent:'WeatherForecast'
+},{
+    pattern:'\\b(?<weather>hot|cold|rain|rainy|sunny|snow|thunderstorms|windy|drizzle)\\b\\s' +
+        '\\b(?<time>day\\s+after\\s+tomorrow|tomorrow|today)\\b\\s+in\\s+\\b(?<city>(?:\\w+\\b\\s*)+)',
+    intent:'WeatherForecast'
+}
+];
 module.exports = patternDict;

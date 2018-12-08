@@ -2,6 +2,7 @@
 
 const colors = require('colors');
 const dictionary = require('./dictionary');
+const moment = require('moment');
 let getFeel = temp => {
   if(temp < 5) {
       return "extremely cold";
@@ -25,12 +26,43 @@ let getPrefix = (conditionCode, tense='present')=>{
   });
   return findPrefix.prefix || "";
 };
+
+let getDate = day =>{
+    day=day.toLowerCase().trim();
+    switch(day){
+        case 'tomorrow':
+            return moment().add(1,'d').format("DD MMM YYYY");
+            break;
+        case 'day after tomorrow':
+            return moment().add(2,'d').format("DD MMM YYYY");
+            break;
+        default:
+            return moment().format("DD MMM YYYY");
+    }
+};
 let currentWeather = response =>{
     if(response.query.results){
         let resp=response.query.results.channel;
         let location= `${resp.location.city}, ${resp.location.country}`;
         let {text, temp,code} = resp.item.condition;
-        return `Right now, ${getPrefix(code)} ${text.toLowerCase().red.bold} in ${location.bold}. It is ${getFeel(Number(temp))} at ${temp.green} degrees.`
+        return `Right now, ${getPrefix(code)} ${text.toLowerCase().red.bold} in ${location.bold}. It is ${getFeel(Number(temp))} at ${temp.green.bold} degrees.`
+    }else{
+        return "I don't seem to know anything about this place... Sorry :(";
     }
 };
-module.exports={currentWeather};
+let forecastWeather= (response, data) =>{
+    if(response.query.results){
+        let parseDate = getDate(data.time);
+        let resp=response.query.results.channel;
+        let forecast= resp.item.forecast.filter(item => {
+           return item.date === parseDate;
+        })[0];
+        let location= `${resp.location.city}, ${resp.location.country}`;
+        let regEx = new RegExp(data.weather,"i");
+        let testConditions = regEx.test(forecast.text);
+        return `${testConditions ? 'Yes'.green.bold : 'No'.red.bold}, ${getPrefix(forecast.code,'future')} ${forecast.text.toLowerCase().blue.bold} ${data.time} in ${location}`;
+    }else{
+        return "I don't seem to know anything about this place... Sorry :(";
+    }
+};
+module.exports={currentWeather,forecastWeather};
