@@ -1,4 +1,4 @@
-# vanilla-weather-bot
+# vanilla-weather-bot-terminal
 A simple chatbot that tells you the current weather and weather forecast using the Yahoo Weather API and Node JS.
 
 This chatbot uses simple pattern matching i.e. regular expressions to extract intents and entities. If the patterns match it appropriately calls the Yahoo Weather API and parses the response properly to give a nice human readable reply.
